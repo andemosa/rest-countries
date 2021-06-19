@@ -1,26 +1,92 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "react-query";
+import Spinner from "react-spinkit";
+import { BrowserRouter as Router } from "react-router-dom";
+import styled from "styled-components";
+import Index from "./components";
+import { setCountries } from "./contexts/countryAction";
+import { useCountryDispatch, useCountryState } from "./contexts/CountryContext";
+import { useContext } from "react";
+import { ThemeContext } from "./contexts/ThemeContext";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// Types
+export type Params = {
+  name: string;
 }
 
+export type CountryType = {
+  alpha3Code: string;
+  borders: Array<string>;
+  capital: string;
+  currencies: Array<Params>;
+  flag: string;
+  languages: Array<Params>;
+  name: string;
+  nativeName: string;
+  population: number;
+  region: string;
+  subregion: string;
+  topLevelDomain: Array<string>;
+};
+
+const getCountries = async (): Promise<any> =>
+  await (await fetch("https://restcountries.eu/rest/v2/all")).json();
+
+const App = (): JSX.Element => {
+  const themeContext = useContext(ThemeContext)
+  const dispatch = useCountryDispatch();
+  const state = useCountryState()
+  const { data, isLoading, error } = useQuery<CountryType[]>(
+    "countries",
+    getCountries
+  );
+
+  
+  if (isLoading)
+  return (
+    <Wrapper>
+        <Spinner
+          name="folding-cube"
+          color="#000070"
+          className="spin_kit_icon"
+          />
+      </Wrapper>
+    );
+    if (error)
+    return (
+      <Wrapper>
+        <div>Something went wrong ...</div>
+      </Wrapper>
+    );
+    
+  if(data?.length !== 0 && state?.countries.length === 0) setCountries(dispatch, data!)
+
+  return (
+    <Router>
+      <Container style={{
+        background: themeContext?.themeStyles.elements,
+        color: themeContext?.themeStyles.text,
+        transition:"background 3s ease-out"
+      }}>
+        {
+          state?.countries.length !==0 && (
+            <Index />
+          )
+        }
+      </Container>
+    </Router>
+  );
+};
+
 export default App;
+
+const Container = styled.div`
+  font-family: "Nunito Sans", sans-serif;
+  min-height: 100vh;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+`;
