@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { numberWithCommas } from "../utils/utils";
 
+
 type AppProps = {
   alpha3Code: string;
-  flag: string;
+  flag: any;
   name: string;
   population: number;
   region: string;
@@ -31,7 +32,7 @@ const CountryCard = ({
     >
       <Link to={`/${alpha3Code}`}>
         <FlagCon>
-          <img src={flag} alt={name} />
+          <img src={flag?.svg} alt={name} />
         </FlagCon>
         <TextCon>
           <h3>{name}</h3>

@@ -14,22 +14,21 @@ export type Params = {
 }
 
 export type CountryType = {
-  alpha3Code: string;
+  cca3: string;
   borders: Array<string>;
-  capital: string;
-  currencies: Array<Params>;
-  flag: string;
-  languages: Array<Params>;
-  name: string;
-  nativeName: string;
+  capital: any;
+  currencies: any;
+  flags: any;
+  languages: any;
+  name: any;
   population: number;
   region: string;
   subregion: string;
-  topLevelDomain: Array<string>;
+  tld: Array<string>;
 };
 
 const getCountries = async (): Promise<any> =>
-  await (await fetch("https://restcountries.eu/rest/v2/all")).json();
+  await (await fetch("https://restcountries.com/v3.1/all")).json();
 
 const App = (): JSX.Element => {
   const themeContext = useContext(ThemeContext)
@@ -39,7 +38,6 @@ const App = (): JSX.Element => {
     "countries",
     getCountries
   );
-
   
   if (isLoading)
   return (

@@ -7,6 +7,7 @@ import { useCountryState } from "../contexts/CountryContext";
 const CountryList = () => {
   const state = useCountryState();
   const countries = state?.shownCountries;
+  const searchFilter = state?.searchFilter;
   const themeContext = useContext(ThemeContext);
   return (
     <Container
@@ -16,17 +17,21 @@ const CountryList = () => {
       }}
     >
       {countries?.length === 0 ? (
-        <div>Sorry, no countries found....</div>
+        <div>
+          Sorry, no countries found for{" "}
+          <span style={{ fontWeight: "bold" }}>{searchFilter}</span>.... Please
+          try another search term
+        </div>
       ) : (
         countries?.map((item, index) => (
           <CountryCard
-            capital={item.capital}
+            capital={item?.capital}
             key={index}
-            name={item.name}
-            flag={item.flag}
+            name={item.name.common}
+            flag={item.flags}
             population={item.population}
             region={item.region}
-            alpha3Code={item.alpha3Code}
+            alpha3Code={item.cca3}
           />
         ))
       )}

@@ -9,7 +9,12 @@ import {
   useCountryState,
 } from "../contexts/CountryContext";
 import { getCountryDetail, setCountryCode } from "../contexts/countryAction";
-import { numberWithCommas, showItems } from "../utils/utils";
+import {
+  numberWithCommas,
+  showItems,
+  showCurrencies,
+  showLanguages,
+} from "../utils/utils";
 
 interface RouteParams {
   name: string;
@@ -43,16 +48,20 @@ export default function CountryDetail() {
       </Link>
       <Flex>
         <FlagCon>
-          <img src={countryDetail?.flag} alt="" style={{
-            border: `1px solid ${themeContext?.themeStyles.text}`
-          }}/>
+          <img
+            src={countryDetail?.flags?.svg}
+            alt=""
+            style={{
+              border: `1px solid ${themeContext?.themeStyles.text}`,
+            }}
+          />
         </FlagCon>
         <DetailsCon>
-          <h3>{countryDetail?.name}</h3>
+          <h3>{countryDetail?.name?.common}</h3>
           <Flex>
             <DetailsCon>
               <div>
-                <Bold>Native Name :</Bold> {countryDetail?.nativeName}
+                <Bold>Native Name :</Bold> {countryDetail?.name?.common}
               </div>
               <div>
                 <Bold>Population :</Bold>{" "}
@@ -70,15 +79,17 @@ export default function CountryDetail() {
             </DetailsCon>
             <DetailsCon>
               <div>
-                <Bold>Top Level Domain :</Bold> {countryDetail?.topLevelDomain}
+                <Bold>Top Level Domain :</Bold> {countryDetail?.tld}
               </div>
               <div>
                 <Bold>Currencies :</Bold>{" "}
-                {countryDetail && showItems(countryDetail?.currencies)}
+                {countryDetail &&
+                  showItems(showCurrencies(countryDetail?.currencies))}
               </div>
               <div>
                 <Bold>Languages :</Bold>{" "}
-                {countryDetail && showItems(countryDetail?.languages)}
+                {countryDetail &&
+                  showItems(showLanguages(countryDetail?.languages))}
               </div>
             </DetailsCon>
           </Flex>
@@ -86,11 +97,11 @@ export default function CountryDetail() {
             <div>
               <Border>Borders:</Border>
               <BorderDetails>
-                {countryDetail?.borders.length !== 0
-                  ? countryDetail?.borders?.map((border) => (
+                {!countryDetail?.borders?.length
+                  ? `Unfortunately ${countryDetail?.name?.common} has no known bordering countries`
+                  : countryDetail?.borders?.map((border) => (
                       <BorderButton key={border} name={border} />
-                    ))
-                  : `Unfortunately ${countryDetail.name} has no known bordering countries`}
+                    ))}
               </BorderDetails>
             </div>
           </BorderCon>

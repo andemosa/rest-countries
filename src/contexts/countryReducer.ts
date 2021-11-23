@@ -71,7 +71,7 @@ export const CountryReducer = (
         ...state,
         shownCountries: state.countries.filter((country) => {
           const regex = new RegExp(state.searchFilter, "gi");
-          return country.name.match(regex);
+          return country.name.common.match(regex);
         }),
       };
     case actionTypes.SET_COUNTRY_CODE:
@@ -84,7 +84,7 @@ export const CountryReducer = (
         ...state,
         countryDetail: state.countries.find(
           (country) =>
-            country.alpha3Code.toLowerCase() === state.countryCode.toLowerCase()
+            country.cca3.toLowerCase() === state.countryCode.toLowerCase()
         ),
       };
     default:

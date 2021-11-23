@@ -14,9 +14,9 @@ const BorderButton = ({ name }: AppProps) => {
 
   const showCountryName = (code: string) => {
     const country = state?.countries?.find(
-      (country) => country.alpha3Code.toLowerCase() === code.toLowerCase()
+      (country) => country.cca3.toLowerCase() === code.toLowerCase()
     );
-    return country?.name;
+    return country?.name.common;
   };
 
   return (

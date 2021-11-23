@@ -1,13 +1,29 @@
-import { Params } from "../App";
+export const showCurrencies = (object: any) => {
+  const arr = [];
+  for (const key in object) {
+    const element = object[key];
+    arr.push(element.name);
+  }
+  return arr;
+};
 
-export const showItems = (array: Array<Params>) => {
+export const showLanguages = (object: any) => {
+  const arr = [];
+  for (const key in object) {
+    const element = object[key];
+    arr.push(element);
+  }
+  return arr;
+};
+
+export const showItems = (array: Array<string>) => {
   return array !== undefined
     ? array.map((item) => {
         let str = "";
         if (array.indexOf(item) !== array.length - 1) {
-          return str + item.name + ", ";
+          return str + item + ", ";
         } else {
-          return str + item.name;
+          return str + item;
         }
       })
     : "";
